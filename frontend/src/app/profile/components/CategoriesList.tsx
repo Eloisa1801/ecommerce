@@ -9,7 +9,7 @@ function CategoriesList() {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<any>(null);
-  const [loadingDelete, setLoadingDelete] = useState(false)
+  const [loadingDelete, setLoadingDelete] = useState(false);
 
   const getCategories = async () => {
     try {
@@ -29,16 +29,18 @@ function CategoriesList() {
 
   const onDelete = async (id: string) => {
     try {
-      await axios.delete(`http://localhost:3000/category/${id}`);
-      message.success("Category delete sucessfully");
+      setLoadingDelete(true)
+      await axios.delete(`http://localhost:3000/category/${id}`)
+      message.success("Category deleted successfully")
       setSelectedCategory(null);
       getCategories();
     } catch (error: any) {
       message.error(error.message)
     } finally {
-      setLoadingDelete(false)
+      setSelectedCategory(false);
     }
-  };
+  }
+
   const columns = [
     {
       title: 'Name',
@@ -62,65 +64,67 @@ function CategoriesList() {
       key: 'action',
       render: (action: any, params: any) => {
         return (
-          <div className="flex gap-5 items-center">
+          <div className='flex gap-5 items-center'>
             <Button
-              type='primary'
-              className="btn-small mr-2a"
-              onClick={() => {
-                setShowCategoryForm(true)
-                setSelectedCategory(params)
-              }}
+            type="primary"
+            className="btn-small mr-2a"
+            onClick={() => {
+              setShowCategoryForm(true);
+              setSelectedCategory(params);
+            }}>
+              Edit
+            </Button>
+            <Button
+            type="primary"
+            danger
+            className='btn-small'
+            onClick={() => [
+              setSelectedCategory(params),
+              onDelete(params.id)
+            ]}
+            loading={loadingDelete && selectedCategory?.id === params.id}
             >
-              Edit</Button>
-            <Button
-              type='primary'
-              danger className="btn-small"
-              onClick={() => [
-                setSelectedCategory(params),
-                onDelete(params.id)
-              ]}
-              loading={loadingDelete && selectedCategory?.id === params.id}
-            >Delete</Button>
+              Delete
+            </Button>
           </div>
-        )
+        );
       }
-    }
     },
   ];
 
-return (
-  <div>
-    <div className="flex justify-end">
-      <Button
-        type="primary"
-        onClick={() => {
-          setShowCategoryForm(true);
-        }}
-      >
-        Add Category
-      </Button>
-    </div>
+  return (
+    <div>
+      <div className="flex justify-end">
+        <Button
+          type="primary"
+          onClick={() => {
+            setShowCategoryForm(true);
+          }}
+        >
+          Add Category
+        </Button>
+      </div>
 
-    <div className="mt-5">
-      <Table
-        dataSource={categories}
-        columns={columns}
-        loading={loading}
-        pagination={false}
-      />
-    </div>
+      <div className="mt-5">
+        <Table
+          dataSource={categories}
+          columns={columns}
+          loading={loading}
+          pagination={false}
+        />
+      </div>
 
-    {showCategoryForm && (
-      <CategoryForm
-        showCategoryForm={showCategoryForm}
-        setShowCategoryForm={setShowCategoryForm}
-        reloadData={() => getCategories()}
-        category={selectedCategory}
-        setSelectedCategory={setSelectedCategory}
-      ></CategoryForm>
-    )}
-  </div>
-);
+      {showCategoryForm && (
+        <CategoryForm
+          showCategoryForm={showCategoryForm}
+          setShowCategoryForm={setShowCategoryForm}
+          reloadData={() => getCategories()}
+          category={selectedCategory}
+          setSelectedCategory={setSelectedCategory}
+        ></CategoryForm>
+      )}
+    </div>
+  );
 }
 
 export default CategoriesList;

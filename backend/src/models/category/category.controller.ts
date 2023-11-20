@@ -13,21 +13,21 @@ import { UpdateCategoryDto } from './dto/update-category.dto';
 
 @Controller('category')
 export class CategoryController {
-  constructor(private readonly categoryService: CategoryService) { }
+  constructor(private readonly categoryService: CategoryService) {}
 
   @Post()
   create(@Body() createCategoryDto: CreateCategoryDto) {
-    return await this.categoryService.create(createCategoryDto);
+    return this.categoryService.create(createCategoryDto);
   }
 
   @Get()
   findAll() {
-    return await this.categoryService.findAll();
+    return this.categoryService.findAll();
   }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return await this.categoryService.findOne(+id);
+    return this.categoryService.findOne(+id);
   }
 
   @Patch(':id')
@@ -35,12 +35,11 @@ export class CategoryController {
     @Param('id') id: string,
     @Body() updateCategoryDto: UpdateCategoryDto,
   ) {
-    return await this.categoryService.update(+id, updateCategoryDto);
+    return this.categoryService.update(+id, updateCategoryDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return await this.categoryService.remove(+id);
+    return this.categoryService.remove(+id);
   }
 }
-//ajustar return

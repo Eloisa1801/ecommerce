@@ -56,8 +56,9 @@ function LayoutProvider({ children }: { children: React.ReactNode }) {
 
       {isPrivatePage && (
         <div className="bg-primary py-5 px-5 flex justify-between items-center">
-          <div className="flex cursor-pointer" onClick={() => {
-            router.push('/');
+          <div className="flex cursor-pointer"
+          onClick={() => {
+            router.push("/");
           }}>
             <h1 className="text-2xl font-bold text-red-500">Frame Shop</h1>
           </div>
