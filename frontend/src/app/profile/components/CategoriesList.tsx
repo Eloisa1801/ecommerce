@@ -1,5 +1,6 @@
+'use client';
 import { Button, Table, message } from 'antd';
-import { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import CategoryForm from './CategoryForm';
 import axios from 'axios';
 import moment from 'moment';
@@ -23,25 +24,27 @@ function CategoriesList() {
     }
   };
 
-  useEffect(() => {
+  React.useEffect(() => {
     getCategories();
   }, []);
 
+  // delete category
   const onDelete = async (id: string) => {
     try {
-      setLoadingDelete(true)
-      await axios.delete(`http://localhost:3000/category/${id}`)
-      message.success("Category deleted successfully")
+      setLoadingDelete(true);
+      await axios.delete(`http://localhost:3000/category/${id}`);
+      message.success('Category deleted successfully');
       setSelectedCategory(null);
       getCategories();
     } catch (error: any) {
-      message.error(error.message)
+      message.error(error.message);
     } finally {
-      setSelectedCategory(false);
+      setLoadingDelete(false);
     }
-  }
+  };
 
   const columns = [
+    { title: 'ID', dataIndex: 'id', key: 'id' },
     {
       title: 'Name',
       dataIndex: 'name',
@@ -56,7 +59,8 @@ function CategoriesList() {
       title: 'Created At',
       dataIndex: 'createdAt',
       key: 'createdAt',
-      render: (createdAt: string) => moment(createdAt).format('DD MMM YYYY'),
+      render: (createdAt: string) =>
+        moment(createdAt).format('DD MMM YYYY hh:mm'),
     },
     {
       title: 'Action',
@@ -64,31 +68,29 @@ function CategoriesList() {
       key: 'action',
       render: (action: any, params: any) => {
         return (
-          <div className='flex gap-5 items-center'>
+          <div className="flex gap-3 items-center">
             <Button
-            type="primary"
-            className="btn-small mr-2a"
-            onClick={() => {
-              setShowCategoryForm(true);
-              setSelectedCategory(params);
-            }}>
+              type="primary"
+              className="mr-2a btn-small"
+              onClick={() => {
+                setShowCategoryForm(true);
+                setSelectedCategory(params);
+              }}
+            >
               Edit
             </Button>
             <Button
-            type="primary"
-            danger
-            className='btn-small'
-            onClick={() => [
-              setSelectedCategory(params),
-              onDelete(params.id)
-            ]}
-            loading={loadingDelete && selectedCategory?.id === params.id}
+              type="primary"
+              danger
+              className="btn-small"
+              onClick={() => [setSelectedCategory(params), onDelete(params.id)]}
+              loading={loadingDelete && selectedCategory?.id === params.id}
             >
               Delete
             </Button>
           </div>
         );
-      }
+      },
     },
   ];
 
@@ -121,7 +123,7 @@ function CategoriesList() {
           reloadData={() => getCategories()}
           category={selectedCategory}
           setSelectedCategory={setSelectedCategory}
-        ></CategoryForm>
+        />
       )}
     </div>
   );
