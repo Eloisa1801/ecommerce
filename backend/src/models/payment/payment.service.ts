@@ -11,13 +11,15 @@ export class PaymentService {
       apiVersion: '2022-11-15',
     });
   }
+
   async create(createPaymentDto: CreatePaymentDto) {
-    const paymentIntent = await this.stripe.paymentIntents.creat({
+    const paymentIntent = await this.stripe.paymentIntents.create({
       amount: createPaymentDto.amount * 100,
       currency: createPaymentDto.currency,
       description: 'Frame Shop Payment',
       payment_method_types: ['card'],
     });
+
     return paymentIntent.client_secret;
   }
 
