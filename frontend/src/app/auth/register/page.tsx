@@ -1,6 +1,6 @@
 'use client';
 
-import { Button, Form, message, notification } from 'antd';
+import { Button, Form, message } from 'antd';
 import Link from 'next/link';
 import axios from 'axios';
 import { useState } from 'react';
@@ -21,18 +21,12 @@ function Register() {
       setLoading(true);
       await axios.post('http://localhost:3000/user', values).then((res) => {
         setLoading(false);
-        notification.success({
-          message: 'Success',
-          description: `Register successfully! Please login to continue!`,
-        });
+        message.success('Register success, please login to continue');
         router.push('/auth/login');
         console.log(res);
       });
     } catch (error: any) {
-      notification.error({
-        message: 'Error',
-        description: error.message,
-      });
+      message.error(error.response.data.message);
       setLoading(false);
     }
   };
@@ -50,7 +44,7 @@ function Register() {
             onFinish={onRegister}
             className="w-[400px] flex flex-col gap-5"
             layout="vertical"
-            initialValues={{ name: '', email: '', password: '' }}
+            initialValues={{name: "", email: "", password: ""}}
           >
             <h1 className="text-2xl font-bold">Register</h1>
             <hr />

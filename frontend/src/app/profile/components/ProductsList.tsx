@@ -1,76 +1,75 @@
-/* eslint-disable @next/next/no-img-element */
-'use client';
+'use client'
 import { Button, Table, message } from 'antd';
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import moment from 'moment';
 import { useRouter } from 'next/navigation';
+import axios from 'axios';
+import { useEffect, useState } from 'react';
+import moment from 'moment';
 
 function ProductsList() {
   const router = useRouter();
-  const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(false);
+
+  const [products, setProducts] = useState([])
+  const [loading, setloading] = useState(false)
 
   const getProducts = async () => {
     try {
-      setLoading(true);
+      setloading(true)
       const res = await axios.get('http://localhost:3000/product');
-      setProducts(res.data);
-      console.log(res.data);
-    } catch (error: any) {
+      setProducts(res.data)
+    } catch (error:any) {
       message.error(error.message);
     } finally {
-      setLoading(false);
+      setloading(false)
     }
   };
 
   useEffect(() => {
-    getProducts();
-  }, []);
+    getProducts()
+  }, [])
 
   const columns = [
     {
-      title: 'Product',
-      dataIndex: 'name',
-      key: 'name',
+      title: "Product",
+      dataIndex: "name",
+      key: "name",
       render: (text: string, record: any) => (
         <img
-          src={record.images[0].url || ''}
+          src={record.images[0].url || ""}
           alt={record.name}
-          className="w-20 h-20 object-scale-down rounded-full"
+          className="w-20 h-20 object-cover rounded-full"
         />
       ),
     },
     {
-      title: 'Description',
-      dataIndex: 'description',
-      key: 'description',
+      title: "Description",
+      dataIndex: "description",
+      key: "description",
       render: (description: string) => <span>{description}</span>,
     },
     {
-      title: 'Price',
-      dataIndex: 'price',
-      key: 'price',
+      title: "Price",
+      dataIndex: "price",
+      key: "price",
       render: (price: number) => <span>{price}</span>,
     },
     {
-      title: 'Price',
-      dataIndex: 'price',
-      key: 'price',
+      title: "Price",
+      dataIndex: "price",
+      key: "price",
       render: (price: number) => <span>{price}</span>,
     },
     {
-      title: 'Created At',
-      dataIndex: 'createdAt',
-      key: 'createdAt',
+      title: "Created At",
+      dataIndex: "createdAt",
+      key: "createdAt",
       render: (createdAt: string) => (
-        <span>{moment(createdAt).format('DD MMM YYYY hh:mm A')}</span>
+        <span>{moment(createdAt).format("DD MMM YYYY hh:mm A")}</span>
       ),
     },
     {
-      title: 'Action',
-      dataIndex: 'action',
-      key: 'action',
+      title: "Action",
+      dataIndex: "action",
+      key: "action",
       render: (action: any, params: any) => {
         return (
           <div className="flex gap-3 items-center">
@@ -108,11 +107,11 @@ function ProductsList() {
         </Button>
       </div>
       <Table
-        dataSource={products}
         columns={columns}
+        dataSource={products}
         loading={loading}
         rowKey="_id"
-      />
+      ></Table>
     </div>
   );
 }

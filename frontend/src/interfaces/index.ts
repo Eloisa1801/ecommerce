@@ -3,12 +3,12 @@ export interface ProductInterface {
   price: number;
   description: string;
   images: Image[];
-  category: number;
+  category: string;
   stock: number;
-  rating?: number;
+  rating?:number;
 
-  id?: number;
-  createdAt: string;
+  id?: string;
+  createdAt:string;
   updatedAt: string;
   quantity: number;
 }
@@ -18,5 +18,5 @@ export interface Image {
   url: string;
   product_id: string;
   createdAt: string;
-  updateAt: string;
+  updatedAt: string;
 }

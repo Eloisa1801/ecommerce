@@ -3,12 +3,12 @@
 import React, { useEffect, useState } from 'react';
 import ProductForm from '../components/ProductForm';
 import { useRouter } from 'next/navigation';
-import { uploadImageAndReturnUrls } from '@/helpers/imageHandling';
-import { message, notification } from 'antd';
+import { uploadImageAndReturnUrls } from '@/helpers/imageHandle';
+import { message } from 'antd';
 import axios from 'axios';
 
 function AddProduct() {
-  const [selectedFiles = [], setSelectedFiles] = useState([]);
+  const [selectedFiles, setSelectedFiles] = useState([]);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
@@ -17,7 +17,7 @@ function AddProduct() {
     description: string;
     price: number;
     stock: number;
-    rate: 0
+    categoryId: string;
   }
 
   interface ImgFormProps {
@@ -25,16 +25,16 @@ function AddProduct() {
     productId: string;
   }
 
-  // save product with images
+  //save product with imagens
   const onSave = async (values: AddFormProps) => {
     try {
       setLoading(true);
       const imgUrls = await uploadImageAndReturnUrls(selectedFiles);
       values.price = Number(values.price);
       values.stock = Number(values.stock);
-      values.rate = 0;
+      values.categoryId = String(values.categoryId);
 
-      // save product info
+      //save product info
       const respProduct = await axios.post(
         'http://localhost:3000/product',
         values
@@ -46,23 +46,15 @@ function AddProduct() {
             url: img,
             productId: respProduct.data.id,
           };
+          console.log(imgForm.url);
 
           axios.post('http://localhost:3000/image', imgForm);
         });
       }
 
-      notification.success({
-        message: 'Product saved successfully',
-        description: `Product ${values.name} saved successfully`,
-      });
-      // console.log(respProduct)
-      // tendo o ID do product fazer um POST em images com as URLs e ID do produto
-      router.push('/profile?id=2');
+      message.success('Product saved successfully');
     } catch (error: any) {
-      notification.error({
-        message: 'Error',
-        description: error.message,
-      });
+      message.error(error.message);
     } finally {
       setLoading(false);
     }

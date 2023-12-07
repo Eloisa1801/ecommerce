@@ -1,10 +1,6 @@
 'use client';
 import { ProductInterface } from '@/interfaces';
-import {
-  CartState,
-  EditProductCart,
-  RemoveProductCart,
-} from '@/redux/cartSlice';
+import { CartState, EditProductCart, RemoveProductCart } from '@/redux/cartSlice';
 import { Button } from 'antd';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -12,13 +8,16 @@ import Image from 'next/image';
 import CheckoutModal from './CheckoutModal';
 
 function Cart() {
-  const [showCheckoutModal, setShowCheckoutModal] = useState(false)
+  const [showCheckoutModal, setshowCheckoutModal] = useState(false)
   const { cartItems }: CartState = useSelector((state: any) => state.cart);
   const dispatch = useDispatch();
-  const subTotal = cartItems.reduce(
-    (acc, item) => acc + item.price * item.quantity, 0
+
+  const subtotal = cartItems.reduce(
+    (acc, item) => acc + item.price * item.quantity,
+    0
   )
-  const total = subTotal + 50;
+
+  const total = subtotal + 50; //50 = shipping fee
 
   return (
     <div className="mt-10">
@@ -129,9 +128,14 @@ function Cart() {
                 <span>$ {total}</span>
               </div>
 
-              <Button block type="primary" className="mt-10" onClick={() => {
-                setShowCheckoutModal(true)
-              }}>
+              <Button
+                block
+                type="primary"
+                className="mt-10"
+                onClick={() => {
+                  setshowCheckoutModal(true);
+                }}
+              >
                 Proceed to Checkout
               </Button>
             </div>
@@ -143,10 +147,11 @@ function Cart() {
           <h1 className="text-sm">Your cart is empty</h1>
         </div>
       )}
+
       {showCheckoutModal && (
         <CheckoutModal
-          setShowCheckoutModal={setShowCheckoutModal}
-          showChechoutModal={showCheckoutModal}
+          setShowCheckoutModal={setshowCheckoutModal}
+          showCheckoutModal={showCheckoutModal}
           total={total}
         />
       )}

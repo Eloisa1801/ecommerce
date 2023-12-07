@@ -1,6 +1,6 @@
 'use client';
 
-import { Button, Form, message, notification } from 'antd';
+import { Button, Form, message } from 'antd';
 import Link from 'next/link';
 import axios from 'axios';
 import { useState } from 'react';
@@ -19,28 +19,16 @@ function Login() {
   const onLogin = async (values: UserType) => {
     try {
       setLoading(true);
-      const { data } = await axios.post('http://localhost:3000/login', values);
-      if (data.statusCode !== 200) {
-        notification.error({
-          message: 'Error',
-          description: data.message,
-        });
+      const res = await axios.post('http://localhost:3000/login', values);
+      if (res.data.statusCode !== 200) {
+        message.error(res.data.message);
         return;
       }
-
       // administrar o token
-      document.cookie = `token=${data.token}; path=/;`;
-
-      notification.success({
-        message: 'Success',
-        description: `Login successfully! Welcome ${data.user.name}`,
-      });
+      message.success(res.data.message);
       router.push('/');
     } catch (error: any) {
-      notification.error({
-        message: 'Error',
-        description: error.message,
-      });
+      message.error(error.response.data.message);
       setLoading(false);
     } finally {
       setLoading(false);
@@ -60,7 +48,7 @@ function Login() {
             onFinish={onLogin}
             className="w-[400px] flex flex-col gap-5"
             layout="vertical"
-            initialValues={{ name: '', email: '', password: '' }}
+            initialValues={{name: "", email: "", password: ""}}
           >
             <h1 className="text-2xl font-bold">Login</h1>
             <hr />

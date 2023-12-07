@@ -1,6 +1,5 @@
 import { ProductInterface } from '@/interfaces';
 import { createSlice } from '@reduxjs/toolkit';
-import Item from 'antd/es/list/Item';
 
 export interface CartState {
   cartItems: ProductInterface[];
@@ -23,6 +22,7 @@ export const cartSlice = createSlice({
     ) => {
       state.cartItems.push(action.payload);
     },
+
     RemoveProductCart: (
       state,
       action: {
@@ -31,7 +31,7 @@ export const cartSlice = createSlice({
       }
     ) => {
       state.cartItems = state.cartItems.filter(
-        (Item) => Item.id != action.payload.id
+        (item) => item.id != action.payload.id
       );
     },
 
@@ -48,8 +48,9 @@ export const cartSlice = createSlice({
     },
 
     ClearCart: (state) => {
-      state.cartItems = [];
-    },
+      state.cartItems = []
+    }
+
   },
 });
 

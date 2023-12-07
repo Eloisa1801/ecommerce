@@ -4,7 +4,7 @@ import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 
-function ProductForm({ setSelectedFiles, loading, onSave }: ProductFormProps) {
+function ProductForm({ setSelectedFiles, loading, onSave}: ProductFormProps) {
   const [categories, setCategories] = useState([]);
   const router = useRouter();
 
@@ -61,7 +61,7 @@ function ProductForm({ setSelectedFiles, loading, onSave }: ProductFormProps) {
         >
           <select>
             <option value="">Select Category</option>
-
+            {/* loading categories */}
             {categories.map((category: any) => (
               <option key={category.id} value={category.id}>
                 {category.name}
@@ -81,18 +81,18 @@ function ProductForm({ setSelectedFiles, loading, onSave }: ProductFormProps) {
           <Upload
             listType="picture-card"
             multiple
-            beforeUpload={(file) => {
-              setSelectedFiles((prev: any) => [...prev, file]);
-              return false;
-            }}
-          >
-            Upload
-          </Upload>
+            beforeUpload={
+              (file) => {
+                setSelectedFiles((prev: any) => [...prev, file]);
+                return false;
+              }
+            }
+          >Upload</Upload>
         </div>
         <div className="col-span-3 gap-5 flex justify-end ">
           <Button
             onClick={() => {
-              router.back();
+              console.log('back');
             }}
           >
             Back
